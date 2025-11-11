@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="GeoStyler: A Generalizable Geometry-aware Diffusion-based Approach for Direct 3D Gaussian Style Transfer">
+  <meta name="keywords" content="3DGS, Stylization">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StylizedGS: Controllable Stylization for 3D Gaussian Splatting</title>
+
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+  </script>
+
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">GeoStyler: A Generalizable Geometry-aware Diffusion-based Approach for Direct 3D Gaussian Style Transfer</h1>
+          <!-- <h1 class="title is-3">TPAMI 2025</h1> -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://Kristen-Z.github.io">Qibin Hu</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="http://people.geometrylearning.com/yyj/">Jisheng Dang</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://SeanComeOn.github.io">Minglin Chen</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://people.wgtn.ac.nz/fanglue.zhang">Longguang Wang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="http://www.geometrylearning.com/lin/">Yulan Guo</a><sup>1*</sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>1</sup>Sun Yat-sen University</span>
+            <span class="author-block"><sup>2</sup>Lanzhou University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://github.com/huhuhuxiao/GeoStyler/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/huhuhuxiao/GeoStyler/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/huhuhuxiao/GeoStyler/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              <!-- Code Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/Kristen-Z/StylizedGS-Jittor"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Jittor)</span>
+                  </a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Teaser.
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div>
+        <img src="./static/images/teaser_new.jpg" alt="teaser" class="center">
+      </div>
+      <h2 class="subtitle has-text">
+        Given a 2D style image, the proposed StylizedGS method can stylize the pre-trained 3D Gaussian Splatting to match the desired style with detailed geometric features and satisfactory visual quality within a few minutes. We also enable users to control several perceptual factors, such as color, the style pattern size (scale), and the stylized regions (spatial), during the stylization to enhance the customization capabilities.
+      </h2>
+
+    </div>
+  </div>
+</section> -->
+
+<div class="columns is-centered has-text-centered" style="background-color: white;">
+  <div class="column is-full-width">
+    <br />
+    <!-- <h2 class="title is-3">Video</h2> -->
+    <div class="publication-video" style="background-color: white;">
+
+      <video autoplay loop muted playsinline controls>
+        <source src="videos/re10k视频_1.mp4" type="video/mp4">
+      </video>
+
+    </div>                        
+  </div>
+</div> 
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+  <!-- <div class="container"> -->
+  
+    <!-- Paper video.
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <br />
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+
+          <iframe src="https://drive.google.com/file/d/1PuDanf0JnpyCRtiurPIESG80pU_nEBIj/preview" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen></iframe>
+
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-four-fifths"> -->
+      <div class="column is-full-width">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Direct 3D scene stylization from sparse views remains a significant challenge, as existing optimization-based methods are prohibitively slow and require dense inputs to prevent geometric corruption. While recent direct methods accelerate this process, their rigid decoupling of a static geometry from appearance often leads to visual artifacts, where stylistic textures conflict with and distort the underlying scene structure. To address these limitations, we introduce GeoStyler, a direct framework that generates high-fidelity, multi-view consistent stylized 3D scenes in seconds. Our approach reformulates the conventional pipeline by first leveraging a diffusion model to generate a set of geometrically consistent stylized 2D images. The core of this stage is a novel hybrid query formulation for the self-attention mechanism. Specifically, cross-view geometric information is directly embedded into the query to enforce 3D consistency, while style information is independently injected via the key and value to preserve scene structure. This process is further stabilized by a geometrically-aware latent initialization that provides a coherent starting point for the denoising process. Subsequently, a decoupled reconstruction network lifts these 2D stylized images to 3D Gaussians. A geometry branch predicts a robust 3D scaffold from the original content images, while a parallel style branch predicts the final appearance from our generated stylized images, ensuring structural integrity is not compromised. Extensive experiments on large-scale benchmarks, including RealEstate10K and ACID, demonstrate that GeoStyler significantly outperforms prior arts in stylization quality and multi-view consistency, achieving state-of-the-art performance with a dramatic speedup.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <br />
+        <h2 class="title is-3">Pipeline</h2>
+          <img src="./static/images/pipeline_v13_01.png" alt="method" style="width:100%; ">
+        <div class="content has-text-justified">
+          <p>
+            Overview of GeoStyler. 
+            GeoStyler employs a decoupled, dual-branch architecture. 
+            The style branch generates multi-view consistent stylized images via a diffusion-based process, while the parallel geometry branch concatenates the per-view cost volumes and monocular features with a 2D U-Net, which can predict the geometric attributes of the scene, including opacity, 3D covariance matrix, and depth maps from the original images. The final stylized 3D Gaussians are synthesized by combining the color from the stylized images with these geometric attributes, using the unprojected depth maps to establish the Gaussian means.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!-- Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <br />
+  
+          <img src="./static/images/pipeline_style_injection_v11_01.png" alt="method" style="width:100%; ">
+        <div class="content has-text-justified">
+          <p>
+            Detailed structure of the style branch. The core of the method lies in the reverse process, where we decouple information within the attention mechanism: style is injected via the key and value from the style image. At the same time, multi-view consistency is enforced through a shared hybrid query built using cross-view attention. Our hybrid initial latent AdaIN bookends this denoising process to ensure a consistent starting point, and a final step using geometric constraint to refine the output.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <br />
+        <h2 class="title is-3">Comparison on the RE10K dataset</h2>
+          <img src="./static/images/results_re10k_v6_01.png" alt="method" style="width:100%; ">
+        <div class="content has-text-justified">
+          <p>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <br />
+        <h2 class="title is-3">Comparison on the ACID dataset</h2>
+          <img src="./static/images/results_acid_v4_01.png" alt="method" style="width:100%; ">
+        <div class="content has-text-justified">
+          <p>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body" style="background-color: white;">
+    <div class="columns is-centered has-text-centered">
+      <div style="width:100%; text-align:center;">
+        <h2 class="title is-3">Results Gallery</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="hero is-light is-small">    <div class="hero-body" style="background-color: white;">               
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <h3 class="title is-4">RealEstate10K dataset</h3>
+        </div>
+    </div>
+
+      <div class="container is-max-desktop">
+        <div id="results-carousel" class="carousel2 results-carousel">
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/star/1b65111d34f57bb0_frame_23_83.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/star/3f33ed2971149ea0_frame_31_103.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/star/7336669f60753832_frame_50_104.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/star/cd8a394c76de9608_frame_8_63.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/star/eb626dd19cb7459c_frame_46_175.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!-- <h2 class="subtitle has-text-centered">Our results on forward-facing captures</h2> -->
+    </div>
+  </section>
+
+
+  <section class="hero is-light is-small">    <div class="hero-body" style="background-color: white;">               
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <!-- <h3 class="title is-4">Feed-forward Scenes</h3> -->
+        </div>
+    </div>
+
+      <div class="container is-max-desktop">
+        <div id="results-carousel" class="carousel2 results-carousel">
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/mountain/7336669f60753832_frame_50_104_2_3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/mountain/7336669f60753832_frame_50_104_2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/mountain/7336669f60753832_frame_50_104_5.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/mountain/7336669f60753832_frame_50_104_6.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/mountain/7336669f60753832_frame_50_104_7.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/mountain/7336669f60753832_frame_50_104.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!-- <h2 class="subtitle has-text-centered">Our results on forward-facing captures</h2> -->
+    </div>
+  </section>
+
+
+
+  <section class="hero is-light is-small">    <div class="hero-body" style="background-color: white;">               
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <h3 class="title is-4">ACID dataset</h3>
+        </div>
+    </div>
+
+      <div class="container is-max-desktop">
+        <div id="results-carousel" class="carousel2 results-carousel">
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/style44/0a9c670fdc395fcd_frame_42_97.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/style44/00eb680b51e30523_frame_72_125.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/style44/1c6451a540bc5d07_frame_642_694.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/style44/2c321c4a0951e89a_frame_26_105.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/style44/5ed91f2069b6235a_frame_72_150.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/style44/7a57f733b42e059f_frame_44_117.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!-- <h2 class="subtitle has-text-centered">Our results on forward-facing captures</h2> -->
+    </div>
+  </section>
+
+
+  <section class="hero is-light is-small">    <div class="hero-body" style="background-color: white;">               
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <!-- <h3 class="title is-4">ACID dataset</h3> -->
+        </div>
+    </div>
+
+      <div class="container is-max-desktop">
+        <div id="results-carousel" class="carousel2 results-carousel">
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/ocean_mountain/00eb680b51e30523_frame_72_125_1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/ocean_mountain/00eb680b51e30523_frame_72_125_3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/ocean_mountain/00eb680b51e30523_frame_72_125_4.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/ocean_mountain/00eb680b51e30523_frame_72_125_5.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/ocean_mountain/00eb680b51e30523_frame_72_125_6.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/ocean_mountain/00eb680b51e30523_frame_72_125.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!-- <h2 class="subtitle has-text-centered">Our results on forward-facing captures</h2> -->
+    </div>
+  </section>
+<!-- <section class="hero is-light is-small">
+    <div class="hero-body" style="background-color: white;">
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <h3 class="title is-4">360<sup>°</sup> Scenes</h3>
+        </div>
+    </div>
+
+      <div class="container is-max-desktop">
+        <div id="results-carousel" class="carousel2 results-carousel">
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/family_73.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/family_48.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/truck_4.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/truck_17.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/counter_9.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/room_135.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="item">
+            <video poster="" id="steve" autoplay controls muted loop height="100%">
+              <source src="videos/garden_10.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <h2 class="subtitle has-text-centered">Our results on forward-facing captures</h2> -->
+    <!-- </div>
+  </section> -->
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body" style="background-color: white;">
+    <div class="container is-max-desktop">
+      
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <h3 class="title is-4">Color Control</h3>
+        </div>
+    </div>
+      <div id="results-carousel" class="carousel3 results-carousel">
+		
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_14_preserve.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_14_12_color.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/orchids.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/orchids_7_preserve.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/orchids_7_26_color.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+</section> -->
+
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body" style="background-color: white;">
+
+    <div class="columns is-centered has-text-centered">
+        <div style="width:100%; text-align:center;">
+          <h3 class="title is-4">Scale Control</h3>
+        </div>
+    </div>
+
+    <div class="container is-max-desktop">
+        
+      <div id="results-carousel" class="carousel3 results-carousel">
+		
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_133_down.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_133.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_133_up.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/leaves_100_down.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/leaves_100.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/leaves_100_up.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+</section> -->
+<!-- 
+<section class="hero is-light is-small">
+  <div class="hero-body" style="background-color: white;">
+    <div class="columns is-centered has-text-centered">
+      <div style="width:100%; text-align:center;">
+        <h3 class="title is-4">Spatial Control</h3>
+      </div>
+    </div>
+    <div class="container is-max-desktop">
+      <div id="spatial-control-carousel" class="carousel3 results-carousel">
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_11_12.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_14_133.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/flower_133_14.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video poster="" id="steve" autoplay controls muted loop height="100%">
+            <source src="videos/room_17_15_132.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@@article{zhang2024stylizedgs,
+  title={Stylizedgs: Controllable stylization for 3d gaussian splatting},
+  author={Zhang, Dingxi and Yuan, Yu-Jie and Chen, Zhuoxun and Zhang, Fang-Lue and He, Zhenliang and Shan, Shiguang and Gao, Lin},
+  journal={arXiv preprint arXiv:2404.05220},
+  year={2024}
+}</code></pre>
+  </div>
+</section> -->
+
+
+<footer class="footer">
+  <div class="container">
+
+    <div class="content has-text-centered">
+      <a class="icon-link"
+        href="">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" 
+        href="https://github.com/Kristen-Z" 
+        class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+
+            The <a href="https://github.com/nerfies/nerfies.github.io">source code</a> for the website 
+            was taken from Nerfies. We appreciate the authors sharing the templates with us.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
